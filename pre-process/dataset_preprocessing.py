@@ -17,7 +17,17 @@ from sklearn.preprocessing import LabelEncoder
 labelencoder_y_movies = LabelEncoder()
 y_movies[:] = labelencoder_y_movies.fit_transform(y_movies[:])
 
+#using regEx for extracting release date from title
+temp_rd = dataset_movies['title'].str.extract('(\(\d.{3})',expand=False)
+dataset_movies['releaseDate'] = temp_rd.str.extract('(\d+)',expand=False)
+
 #timestamp to timestamp_hour, timestamp_day, timestamp_year
-df = np.ceil(pd.DataFrame(y_rating, columns=['timestamp_day'])/86400)
-df = df.to_numpy()
-# df = np.append(y_rating, df)
+dataset_rating['timestamp_hour'] = np.ceil(y_rating/3600)
+dataset_rating['timestamp_day'] = np.ceil(y_rating/86400)
+dataset_rating['timestamp_year'] = np.ceil(y_rating/31536000)
+
+#merge datasets
+merged = pd.merge(dataset_movies, dataset_rating, on = 'movieId')
+
+#save merged as csv
+merged.to_csv('joined.csv')
