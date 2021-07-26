@@ -31,3 +31,18 @@ merged = pd.merge(dataset_movies, dataset_rating, on = 'movieId')
 
 #save merged as csv
 merged.to_csv('joined.csv')
+
+#preprocessing
+labelencoder_timestamp_day = LabelEncoder()
+cat = labelencoder_timestamp_day.fit_transform(merged['timestamp_day'])
+
+
+
+
+
+
+
+
+
+
+
