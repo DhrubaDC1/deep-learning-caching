@@ -42,7 +42,11 @@ merged = merged.reset_index(drop='True')
 #create variable for movieId and timestamp_day
 mov = merged['movieId'].astype(str)
 td = merged['timestamp_day'].astype(str)
+
+#creating merged string (separated by '-')
 merged['a'] = mov+'-'+td
+
+#Creating label based on count from movieId and timestamp_day
 ta= merged['a']
 label = []
 def rec(i, c):
@@ -57,10 +61,17 @@ while(i < len(ta)):
         temp, count = rec(i, count)
     temp+=1
     for p in range(i, temp):
-        label[p] = count
+        label.append(count)
     i = temp
     print(len(ta)-i)
 lbl= pd.DataFrame(label)
+
+#dropping 'a' column
+merged = merged.drop(columns = 'a')
+
+#merging label with previous dataset and saving the dataset in csv format
+merged['label'] = lbl
+merged.to_csv('preprocessed.csv')
 
 #Splitting the dataset into Train and Test sets
 from sklearn.model_selection import train_test_split
