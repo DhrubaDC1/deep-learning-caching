@@ -1,6 +1,6 @@
 #importing libraries
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import pandas as pd
 #import dask.dataframe as dd
 
@@ -32,17 +32,38 @@ merged = pd.merge(dataset_movies, dataset_rating, on = 'movieId')
 #save merged as csv
 merged.to_csv('joined.csv')
 
+#sort merged dataset in ascending order based on movieId and timestamp_day
+merged = merged.sort_values(['movieId','timestamp_day'], ascending= True)
+merged.to_csv('sorted.csv')
+#reset the index
+merged = merged.reset_index(drop='True')
+
 #preprocessing
-labelencoder_timestamp_day = LabelEncoder()
-cat = labelencoder_timestamp_day.fit_transform(merged['timestamp_day'])
+#create variable for movieId and timestamp_day
+mov = merged['movieId'].astype(str)
+td = merged['timestamp_day'].astype(str)
+merged['a'] = mov+'-'+td
+ta= merged['a']
+label = []
+def rec(i, c):
+    if i+1 < len(ta):
+        if ta[i] == ta[i+1]:
+            return rec(i+1, c+1)
+    return i,c
+i=0
+while(i < len(ta)):
+    count = 1
+    if(i < len(ta)-1):
+        temp, count = rec(i, count)
+    temp+=1
+    for p in range(i, temp):
+        label[p] = count
+    i = temp
+    print(len(ta)-i)
+lbl= pd.DataFrame(label)
 
-
-
-
-
-
-
-
-
-
-
+#Splitting the dataset into Train and Test sets
+from sklearn.model_selection import train_test_split
+train_set, test_set = train_test_split(merged, test_size = 0.4, random_state = 0)
+train_set.to_csv('training.csv')
+test_set.to_csv('testing.csv')
