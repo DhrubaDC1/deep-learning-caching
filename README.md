@@ -1,7 +1,7 @@
 # reverse-knife
 **Title**
 
-Deep learning based predictive analytics for efficient content caching in edge network
+Deep learning based predictive analytics for decentralised content caching in the hiererchical edge network
 
 **Abstract**
 
