@@ -31,6 +31,7 @@ merged = pd.merge(dataset_movies, dataset_rating, on = 'movieId')
 
 #save merged as csv
 merged.to_csv('joined.csv')
+print(merged)
 
 #sort merged dataset in ascending order based on movieId and timestamp_day
 merged = merged.sort_values(['movieId','timestamp_day'], ascending= True)
